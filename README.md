@@ -1,2 +1,2 @@
-# SP32-Integrated-Project
+# ESP32-Integrated-Project
 Our ESP32S3 Project
