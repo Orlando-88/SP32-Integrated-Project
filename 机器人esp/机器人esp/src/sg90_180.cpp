@@ -2,17 +2,14 @@
 #include <Arduino.h>
 
 static int sgPin = 42;
-static int sgChannel = 5;
 
 static void setPulse(int duty) {
-  ledcWrite(sgChannel, duty);
+  ledcWrite(sgPin, duty);
 }
 
 void sg90_180Init(int pin) {
   sgPin = pin;
-  ledcAttachPin(pin, sgChannel);
-  delay(200);
-  sg90_180Write(90);
+  ledcAttach(pin, 50, 12);
 }
 
 void sg90_180Write(int angle) {
@@ -20,10 +17,10 @@ void sg90_180Write(int angle) {
   if (angle > 180) angle = 180;
 
   float pulseUs = 500 + (angle / 180.0) * 2000;
-  int duty = (pulseUs / 20000.0) * 1023;
+  int duty = (pulseUs / 20000.0) * 4095;
 
   setPulse(duty);
-  Serial.print("SG90_180 (GPIO");
+  Serial.print("Servo (GPIO");
   Serial.print(sgPin);
   Serial.print("): ");
   Serial.print(angle);

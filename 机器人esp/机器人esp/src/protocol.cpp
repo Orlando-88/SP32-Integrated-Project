@@ -146,6 +146,54 @@ void executeCommand(const char* command) {
     mode5Start();
   } else if (strcmp(command, "MODE:STOP") == 0) {
     modeStop();
+
+  // Fine control commands
+  } else if (strcmp(command, "ROD:ROTATE") == 0) {
+    sg90Write(30);
+    Serial.println("ROD:ROTATE: 旋转吸杆 (30 deg)");
+  } else if (strcmp(command, "ROD:RETURN") == 0) {
+    sg90Write(90);
+    Serial.println("ROD:RETURN: 旋回吸杆 (90 deg)");
+  } else if (strcmp(command, "ROD:DROP") == 0) {
+    sg90Write(150);
+    Serial.println("ROD:DROP: 吸杆下降 (150 deg)");
+  } else if (strcmp(command, "MOVE:MERGE") == 0) {
+    sg90_180Write(0);
+    Serial.println("MOVE:MERGE: 移动合并吸杆 (0 deg)");
+  } else if (strcmp(command, "MOVE:STOP") == 0) {
+    sg90_180Write(90);
+    Serial.println("MOVE:STOP: 停止移动吸杆 (90 deg)");
+  } else if (strcmp(command, "MOVE:SEPARATE") == 0) {
+    sg90_180Write(180);
+    Serial.println("MOVE:SEPARATE: 移动拉开吸杆 (180 deg)");
+  } else if (strcmp(command, "CLAMP:OPEN") == 0) {
+    servoWrite(0);
+    Serial.println("CLAMP:OPEN: 打开夹子 (0 deg)");
+  } else if (strcmp(command, "CLAMP:CLOSE") == 0) {
+    servoWrite(93);
+    Serial.println("CLAMP:CLOSE: 关闭夹子 (93 deg)");
+  } else if (strcmp(command, "PLATFORM:UP") == 0) {
+    stepperStartContinuous(6000);
+    Serial.println("PLATFORM:UP: 上移平台");
+  } else if (strcmp(command, "PLATFORM:DOWN") == 0) {
+    stepperStartContinuous(-6000);
+    Serial.println("PLATFORM:DOWN: 下降平台");
+  } else if (strcmp(command, "PLATFORM:STOP") == 0) {
+    stepperStop();
+    Serial.println("PLATFORM:STOP: 停止平台");
+  } else if (strcmp(command, "SUCTION:ON") == 0) {
+    relaySet(true);
+    Serial.println("SUCTION:ON: 打开吸盘");
+  } else if (strcmp(command, "SUCTION:OFF") == 0) {
+    relaySet(false);
+    Serial.println("SUCTION:OFF: 关闭吸盘");
+  } else if (strcmp(command, "BLOWER:ON") == 0) {
+    relay2Set(true);
+    Serial.println("BLOWER:ON: 打开鼓风机");
+  } else if (strcmp(command, "BLOWER:OFF") == 0) {
+    relay2Set(false);
+    Serial.println("BLOWER:OFF: 关闭鼓风机");
+
   } else {
     Serial.printf("Unknown command: %s\n", command);
   }
@@ -181,26 +229,26 @@ void mode2Start() {
 
   sg90_180Write(90);
   delay(200);
-  sg90Speed(-180);
+  sg90Write(0);
   delay(1000);
 
   sg90Stop();
   relaySet(true);
 
-  sg90Speed(180);
+  sg90Write(180);
   delay(1000);
 
   sg90_180Write(180);
   delay(200);
   sg90Stop();
   delay(100);
-  sg90Speed(-180);
+  sg90Write(0);
   delay(2100);
 
   sg90Stop();
   delay(1500);
 
-  sg90Speed(180);
+  sg90Write(180);
   delay(2100);
 
   sg90Stop();

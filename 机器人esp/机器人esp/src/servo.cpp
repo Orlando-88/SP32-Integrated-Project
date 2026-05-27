@@ -2,15 +2,14 @@
 #include <Arduino.h>
 
 static int servoPin = 47;
-static int servoChannel = 7;
 
 static void setPulse(int duty) {
-  ledcWrite(servoChannel, duty);
+  ledcWrite(servoPin, duty);
 }
 
 void servoInit(int pin) {
   servoPin = pin;
-  ledcAttachPin(pin, servoChannel);
+  ledcAttach(pin, 50, 12);
 }
 
 void servoWrite(int angle) {
@@ -36,7 +35,7 @@ void servoProcessKey(char key) {
       break;
     case 'x':
     case 'X':
-      servoWrite(90);
+      servoWrite(93);
       break;
     case 'c':
     case 'C':
